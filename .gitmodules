@@ -1,0 +1,3 @@
+[submodule "hantec"]
+	path = hantec
+	url = git@git.vauxoo.com:vauxoo/hantec.git
