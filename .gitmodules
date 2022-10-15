@@ -1,3 +1,6 @@
 [submodule "hantec"]
 	path = hantec
 	url = git@git.vauxoo.com:vauxoo/hantec.git
+[submodule "stock-psycho-account"]
+	path = stock-psycho-account
+	url = git@git.vauxoo.com:vauxoo/stock-psycho-account.git
