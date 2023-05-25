@@ -1,3 +1,11 @@
 [submodule "hantec"]
 	path = hantec
 	url = git@git.vauxoo.com:vauxoo/hantec.git
+[submodule "odoo_module"]
+	path = odoo_module
+	url = https://bitbucket.org/madkting/odoo_module.git
+	branch = 15.0
+[submodule "connector"]
+	path = connector
+	url = git@github.com:OCA/connector.git
+	branch = 15.0
