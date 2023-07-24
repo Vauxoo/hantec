@@ -5,3 +5,7 @@
 	path = connector
 	url = git@github.com:OCA/connector.git
 	branch = 15.0
+[submodule "stock-logistics-workflow"]
+	path = stock-logistics-workflow
+	url = git@github.com:OCA/stock-logistics-workflow.git
+	branch = 15.0
