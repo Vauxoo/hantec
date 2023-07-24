@@ -20,3 +20,7 @@
 	path = stock-psycho-account
 	url = git@git.vauxoo.com:vauxoo/stock-psycho-account.git
 	branch = 15.0
+[submodule "stock-logistics-workflow"]
+	path = stock-logistics-workflow
+	url = git@github.com:OCA/stock-logistics-workflow.git
+	branch = 15.0
