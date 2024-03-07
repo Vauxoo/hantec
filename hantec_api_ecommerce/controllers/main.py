@@ -31,8 +31,25 @@ class MainController(Controller):
         
         return {"message": f"Nuevo contacto creado con ID: {contact_id}"}
     
+    @route('/update_contact', methods=['POST'], type='json', auth='user')
+    def update_contact(self):
+
+        data = request.jsonrequest
+        partner_id = data.get('partner_id')  # ID del contacto a actualizar
+        update_vals = data.get('update_vals')  # Valores a actualizar
+
+        # Encontrar el contacto por su ID
+        partner = request.env['res.partner'].browse(partner_id)
+
+        # Actualizar el contacto con los nuevos valores
+        partner.write(update_vals)
+
+        logger.info("Contacto actualizado con ID %s", partner_id)
+
+        return {"message": f"Contacto con ID: {partner_id} actualizado exitosamente."}
+    
     @route('/create_sale_order', methods=['POST'], type='json', auth='user')
-    def create_order_sell(self):
+    def create_sale_order(self):
 
         # id del cliente (partner_id) y lista de productos (product_lines)
         required_fields = ['partner_id', 'product_lines']  # product_lines es una lista de diccionarios con 'product_id' y 'product_qty'
@@ -53,9 +70,9 @@ class MainController(Controller):
         logger.info("Orden de venta creada con ID %s y Team ID %s", sale_order.id, sale_order.team_id.id)
 
         return {"message": f"Orden de venta creada con ID: {sale_order.id}, Team ID: {sale_order.team_id.id}"}
-    
+        
     @route('/confirm_sale_order', methods=['POST'], type='json', auth='user')
-    def confirm_sell_order(self):
+    def confirm_sale_order(self):
         
         data = request.jsonrequest
         sale_order_id = data.get('sale_order_id')
