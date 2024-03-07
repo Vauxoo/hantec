@@ -60,6 +60,7 @@ class MainController(Controller):
         data = request.jsonrequest
         sale_order_id = data.get('sale_order_id')  # ID de la orden de venta existente
         activity_type_id = data.get('activity_type_id')  # ID del tipo de actividad
+        summary = data.get('summary', '') # Texto resumido de la actividad (opcional)
         date_deadline = data.get('date_deadline')  # Fecha límite para la actividad
         note = data.get('note', '')  # Nota de la actividad (opcional)
         user_id = data.get('user_id', request.env.uid)  # Usuario asignado a la actividad
@@ -72,6 +73,7 @@ class MainController(Controller):
             'res_model_id': request.env['ir.model']._get('sale.order').id,
             'res_id': sale_order_id,
             'user_id': user_id,
+            'summary': summary
         })
 
         logger.info("Actividad programada creada con ID %s para la orden de venta %s", activity.id, sale_order_id)
