@@ -95,3 +95,23 @@ class MainController(Controller):
         logger.info("Actividad programada creada con ID %s para la orden de venta %s", activity.id, sale_order_id)
 
         return {"message": f"Actividad programada creada con ID: {activity.id} para la orden de venta {sale_order_id}."}
+    
+    @route('/send_message_sale_order', methods=['POST'], type='json', auth='user')
+    def send_message_sale_order(self):
+        data = request.jsonrequest
+        sale_order_id = data.get('sale_order_id')
+        message_body = data.get('message_body')
+
+        # Encontrar la orden de venta por su ID
+        sale_order = request.env['sale.order'].browse(sale_order_id)
+
+        # Verificar si la orden de venta existe
+        if not sale_order.exists():
+            return {"error": f"No se encontró la orden de venta con ID {sale_order_id}."}
+
+        # Publicar el mensaje en el chat de la orden de venta
+        sale_order.message_post(body=message_body)
+
+        logger.info("Mensaje publicado en la orden de venta con ID %s", sale_order_id)
+
+        return {"message": f"Mensaje publicado exitosamente en la orden de venta con ID: {sale_order_id}."}
