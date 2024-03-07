@@ -54,26 +54,3 @@ class MainController(Controller):
 
         return {"message": f"Orden de venta creada con ID: {sale_order.id}, Team ID: {sale_order.team_id.id}"}
     
-    @route('create_schedule_activity', methods=['POST'], type='json', auth='user')
-    def create_schedule_activity(self):
-
-        data = request.jsonrequest
-        sale_order_id = data.get('sale_order_id')  # ID de la orden de venta existente
-        activity_type_id = data.get('activity_type_id')  # ID del tipo de actividad
-        date_deadline = data.get('date_deadline')  # Fecha límite para la actividad
-        note = data.get('note', '')  # Nota de la actividad (opcional)
-        user_id = data.get('user_id', request.env.uid)  # Usuario asignado a la actividad
-
-        # Crear la actividad programada
-        activity = request.env['mail.activity'].create({
-            'activity_type_id': activity_type_id,
-            'note': note,
-            'date_deadline': date_deadline,
-            'res_model_id': request.env['ir.model']._get('sale.order').id,
-            'res_id': sale_order_id,
-            'user_id': user_id,
-        })
-
-        logger.info("Actividad programada creada con ID %s para la orden de venta %s", activity.id, sale_order_id)
-
-        return {"message": f"Actividad programada creada con ID: {activity.id} para la orden de venta {sale_order_id}."}
