@@ -30,3 +30,20 @@ class MainController(Controller):
         logger.info("Nuevo contacto creado con ID %s", contact_id)
         
         return {"message": f"Nuevo contacto creado con ID: {contact_id}"}
+    
+    @route('/create_sell_order', methods=['POST'], type='json', auth='user')
+    def create_order_sell(self):
+
+        # id del cliente (partner_id) y lista de productos (product_lines)
+        required_fields = ['partner_id', 'product_lines']  # product_lines es una lista de diccionarios con 'product_id' y 'product_qty'
+        sale_order_data = {field: request.jsonrequest.get(field) for field in required_fields if request.jsonrequest.get(field)}
+
+        # Crear la orden de venta
+        sale_order = request.env['sale.order'].sudo().create({
+            'partner_id': sale_order_data['partner_id'],
+            'order_line': [(0, 0, {'product_id': line['product_id'], 'product_uom_qty': line['product_qty']}) for line in sale_order_data['product_lines']]
+        })
+
+        logger.info("Orden de venta creada con ID %s", sale_order.id)
+
+        return {"message": f"Orden de venta creada con ID: {sale_order.id}"}
