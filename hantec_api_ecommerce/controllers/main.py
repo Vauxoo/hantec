@@ -6,15 +6,8 @@ logger = logging.getLogger(__name__)
 
 
 class MainController(Controller):
-    @route('/create_user', methods=['POST'], type='json', auth='user' )
-    def create_user():
-
-        # Campos requeridos
-        # TODO: Evitar validacion de campos requeridos en tiempos de procesamiento
-        required_fields = ['company_type', 'name', 'phone']
-        for field in required_fields:
-            if not request.json.get(field):
-                return {"error": f"El campo {field} es requerido"}
+    @route('/create_contact', methods=['POST'], type='json', auth='user' )
+    def create_contact(self):
         
         # Lista de todos los campos posibles
         # TODO: Revisar los campos
