@@ -36,14 +36,20 @@ class MainController(Controller):
 
         # id del cliente (partner_id) y lista de productos (product_lines)
         required_fields = ['partner_id', 'product_lines']  # product_lines es una lista de diccionarios con 'product_id' y 'product_qty'
-        sale_order_data = {field: request.jsonrequest.get(field) for field in required_fields if request.jsonrequest.get(field)}
+        optional_fields = ['team_id']
+        sale_order_data = {field: request.jsonrequest.get(field) for field in required_fields + optional_fields if request.jsonrequest.get(field)}
 
-        # Crear la orden de venta
-        sale_order = request.env['sale.order'].sudo().create({
+        sale_order_vals = {
             'partner_id': sale_order_data['partner_id'],
             'order_line': [(0, 0, {'product_id': line['product_id'], 'product_uom_qty': line['product_qty']}) for line in sale_order_data['product_lines']]
-        })
+        }
+        
+        if 'team_id' in sale_order_data:
+            sale_order_vals['team_id'] = sale_order_data['team_id']
 
-        logger.info("Orden de venta creada con ID %s", sale_order.id)
+        # Crear la orden de venta
+        sale_order = request.env['sale.order'].create(sale_order_vals)
 
-        return {"message": f"Orden de venta creada con ID: {sale_order.id}"}
+        logger.info("Orden de venta creada con ID %s y Team ID %s", sale_order.id, sale_order.team_id.id)
+
+        return {"message": f"Orden de venta creada con ID: {sale_order.id}, Team ID: {sale_order.team_id.id}"}
