@@ -31,7 +31,7 @@ class MainController(Controller):
         
         return {"message": f"Nuevo contacto creado con ID: {contact_id}"}
     
-    @route('/create_sell_order', methods=['POST'], type='json', auth='user')
+    @route('/create_sale_order', methods=['POST'], type='json', auth='user')
     def create_order_sell(self):
 
         # id del cliente (partner_id) y lista de productos (product_lines)
@@ -53,6 +53,22 @@ class MainController(Controller):
         logger.info("Orden de venta creada con ID %s y Team ID %s", sale_order.id, sale_order.team_id.id)
 
         return {"message": f"Orden de venta creada con ID: {sale_order.id}, Team ID: {sale_order.team_id.id}"}
+    
+    @route('/confirm_sale_order', methods=['POST'], type='json', auth='user')
+    def confirm_sell_order(self):
+        
+        data = request.jsonrequest
+        sale_order_id = data.get('sale_order_id')
+
+        # Encontrar la orden de venta por su ID
+        sale_order = request.env['sale.order'].browse(sale_order_id)
+
+        # Confirmar la orden de venta
+        sale_order.action_confirm()
+
+        logger.info("Orden de venta confirmada con ID %s", sale_order_id)
+
+        return {"message": f"Orden de venta con ID: {sale_order_id} confirmada exitosamente."}
     
     @route('/create_schedule_activity', methods=['POST'], type='json', auth='user')
     def create_schedule_activity(self):
