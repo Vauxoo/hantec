@@ -18,11 +18,10 @@ class MainController(Controller):
         ]
 
         # Construir el diccionario contact_data con solo los campos enviados en el JSON
-        contact_data = {field: request.json.get(field) for field in all_fields if request.json.get(field)}
+        contact_data = {field: request.jsonrequest.get(field) for field in all_fields if request.jsonrequest.get(field) is not None}
 
         # Si category_id está presente, convertirlo en una lista
-        # TODO: Parsear el payload 
-        if 'category_id' in contact_data:
+        if 'category_id' in contact_data and not isinstance(contact_data['category_id'], list):
             contact_data['category_id'] = [contact_data['category_id']]
         
         contact_id = request.env['res.partner'].create(contact_data)
