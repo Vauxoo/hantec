@@ -29,7 +29,7 @@ class MainController(Controller):
         # Utilizar logger en lugar de print
         logger.info("Nuevo contacto creado con ID %s", contact_id)
         
-        return {"message": f"Nuevo contacto creado con ID: {contact_id}"}
+        return {"message": f"Nuevo contacto creado con ID: {contact_id}", "contact_id": contact_id}
     
     @route('/update_contact', methods=['POST'], type='json', auth='user')
     def update_contact(self):
@@ -71,7 +71,7 @@ class MainController(Controller):
             # Actualizar el contacto existente si se encontró
             existing_contact.write(contact_data)
             logger.info("Contacto actualizado con ID %s", existing_contact.id)
-            return {"message": f"Contacto actualizado con ID: {existing_contact.id}."}
+            return {"message": f"Contacto actualizado con ID: {existing_contact.id}.", "contact_id": existing_contact.id}
         else:
             # Crear un nuevo contacto si no se encontró ninguno existente
             if 'email' not in contact_data:
@@ -80,7 +80,7 @@ class MainController(Controller):
                 contact_data['phone'] = phone
             new_contact = request.env['res.partner'].create(contact_data)
             logger.info("Nuevo contacto creado con ID %s", new_contact.id)
-            return {"message": f"Nuevo contacto creado con ID: {new_contact.id}."}
+            return {"message": f"Nuevo contacto creado con ID: {new_contact.id}.", "contact_id": new_contact.id}
     
     @route('/create_sale_order', methods=['POST'], type='json', auth='user')
     def create_sale_order(self):
@@ -103,7 +103,7 @@ class MainController(Controller):
 
         logger.info("Orden de venta creada con ID %s y Team ID %s", sale_order.id, sale_order.team_id.id)
 
-        return {"message": f"Orden de venta creada con ID: {sale_order.id}, Team ID: {sale_order.team_id.id}"}
+        return {"message": f"Orden de venta creada con ID: {sale_order.id}, Team ID: {sale_order.team_id.id}", "sale_order_id": sale_order.team_id.id}
         
     @route('/confirm_sale_order', methods=['POST'], type='json', auth='user')
     def confirm_sale_order(self):
