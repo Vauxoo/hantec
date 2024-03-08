@@ -62,7 +62,10 @@ class MainController(Controller):
 
         for key, value in contact_data.items():
             if isinstance(value, str):
-                contact_data[key] = value.title()  # Convierte la primera letra de cada palabra a mayúscula
+                if key == 'lang' or key == 'company_type':
+                    pass
+                else:
+                    contact_data[key] = value.title()  # Convierte la primera letra de cada palabra a mayúscula
 
         if existing_contact:
             # Actualizar el contacto existente si se encontró
