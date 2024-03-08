@@ -48,6 +48,33 @@ class MainController(Controller):
 
         return {"message": f"Contacto con ID: {partner_id} actualizado exitosamente."}
     
+    @route('/manage_contact', methods=['POST'], type='json', auth='user')
+    def manage_contact(self):
+        
+        data = request.jsonrequest
+        email = data.get('email')
+        phone = data.get('phone')
+        contact_data = data.get('contact_data', {})  # Datos del contacto a actualizar/crear
+
+        # Verificar si ya existe un contacto con el mismo correo electrónico o número de celular
+        domain = ['|', ('email', '=', email), ('mobile', '=', phone)]
+        existing_contact = request.env['res.partner'].search(domain, limit=1)
+
+        if existing_contact:
+            # Actualizar el contacto existente si se encontró
+            existing_contact.write(contact_data)
+            logger.info("Contacto actualizado con ID %s", existing_contact.id)
+            return {"message": f"Contacto actualizado con ID: {existing_contact.id}."}
+        else:
+            # Crear un nuevo contacto si no se encontró ninguno existente
+            if 'email' not in contact_data:
+                contact_data['email'] = email
+            if 'phone' not in contact_data and phone:  # Solo añadir el teléfono si se proporcionó
+                contact_data['phone'] = phone
+            new_contact = request.env['res.partner'].create(contact_data)
+            logger.info("Nuevo contacto creado con ID %s", new_contact.id)
+            return {"message": f"Nuevo contacto creado con ID: {new_contact.id}."}
+    
     @route('/create_sale_order', methods=['POST'], type='json', auth='user')
     def create_sale_order(self):
 
