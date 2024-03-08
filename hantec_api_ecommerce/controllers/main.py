@@ -60,6 +60,10 @@ class MainController(Controller):
         domain = ['|', ('email', '=', email), ('mobile', '=', phone)]
         existing_contact = request.env['res.partner'].search(domain, limit=1)
 
+        for key, value in contact_data.items():
+            if isinstance(value, str):
+                contact_data[key] = value.title()  # Convierte la primera letra de cada palabra a mayúscula
+
         if existing_contact:
             # Actualizar el contacto existente si se encontró
             existing_contact.write(contact_data)
