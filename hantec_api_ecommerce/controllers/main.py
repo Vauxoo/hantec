@@ -81,6 +81,35 @@ class MainController(Controller):
             new_contact = request.env['res.partner'].create(contact_data)
             logger.info("Nuevo contacto creado con ID %s", new_contact.id)
             return {"message": f"Nuevo contacto creado con ID: {new_contact.id}.", "contact_id": new_contact.id}
+        
+    @route('/address_invoice', methods=['POST'], type='json', auth='user')
+    def create_address_invoice(self):
+        env = request.env
+        data = request.jsonrequest
+        partner_id = data.get('partner_id')
+        invoice_data = data.get('invoice_data')
+
+        partner = env['res.partner'].browse(partner_id)
+
+
+        # Buscar si ya existe una dirección de facturación
+        invoice_address = env['res.partner'].search([
+            ('parent_id', '=', partner_id),
+            ('type', '=', 'invoice')
+        ], limit=1)
+
+        if invoice_address:
+            # Actualizar la dirección de facturación existente
+            invoice_address.write(invoice_data)
+        else:
+            # Añadir una nueva dirección de facturación
+            invoice_data.update({
+                'type': 'invoice',
+                'parent_id': partner_id
+            })
+            invoice_address = env['res.partner'].create(invoice_data)
+
+        return {"message": "Dirección de facturación actualizada/creada con éxito.", "invoice_id": invoice_address}
     
     @route('/create_sale_order', methods=['POST'], type='json', auth='user')
     def create_sale_order(self):
