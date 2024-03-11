@@ -109,7 +109,36 @@ class MainController(Controller):
             })
             invoice_address = env['res.partner'].create(invoice_data)
 
-        return {"message": "Dirección de facturación actualizada/creada con éxito.", "invoice_id": invoice_address}
+        return {"message": "Dirección de facturación actualizada/creada con éxito.", "invoice_id": invoice_address.id}
+    
+    @route('/delivery_address', methods=['POST'], type='json', auth='user')
+    def delivery_address(self):
+        env = request.env
+        data = request.jsonrequest
+
+        partner_id = data.get('partner_id')
+        delivery_data = data.get('address_data')
+
+        partner = env['res.partner'].browse(partner_id)
+
+        # Crear o actualizar la dirección de entrega
+        delivery_address = env['res.partner'].search([
+            ('parent_id', '=', partner_id),
+            ('type', '=', 'delivery')
+        ], limit=1)
+
+        if delivery_address:
+            # Actualizar la dirección de entrega existente
+            delivery_address.write(delivery_data)
+        else:
+            # Añadir una nueva dirección de entrega
+            delivery_data.update({
+                'type': 'delivery',
+                'parent_id': partner_id
+            })
+            delivery_address = env['res.partner'].create(delivery_data)
+
+        return {"message": "Dirección de entrega actualizada/creada con éxito.", "delivery_address_id": delivery_address.id}
     
     @route('/create_sale_order', methods=['POST'], type='json', auth='user')
     def create_sale_order(self):
