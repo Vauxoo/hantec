@@ -127,6 +127,13 @@ class MainController(Controller):
             ('type', '=', 'delivery')
         ], limit=1)
 
+        for key, value in delivery_data.items():
+            if isinstance(value, str):
+                if key == 'lang' or key == 'company_type':
+                    pass
+                else:
+                    delivery_data[key] = value.title() 
+
         if delivery_address:
             # Actualizar la dirección de entrega existente
             delivery_address.write(delivery_data)
