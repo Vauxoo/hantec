@@ -254,7 +254,7 @@ class MainController(Controller):
 
         return {"message": f"Mensaje publicado exitosamente en la orden de venta con ID: {sale_order_id}."}
     
-    @route('/get_states_mexico', methods=['POST'], type='json', auth='user')
+    @route('/get_states_mexico', methods=['GET'], type='json', auth='user')
     def get_states_mexico(self):
         env = request.env
 
