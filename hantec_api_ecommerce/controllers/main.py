@@ -24,6 +24,15 @@ class MainController(Controller):
         if 'category_id' in contact_data and not isinstance(contact_data['category_id'], list):
             contact_data['category_id'] = [contact_data['category_id']]
         
+        list_not_title = ['lang', 'company_type', 'email', 'website']
+
+        for key, value in contact_data.items():
+            if isinstance(value, str):
+                if key in list_not_title:
+                    pass
+                else:
+                    contact_data[key] = value.title()
+
         contact_id = request.env['res.partner'].create(contact_data)
 
         # Utilizar logger en lugar de print
@@ -40,6 +49,15 @@ class MainController(Controller):
 
         # Encontrar el contacto por su ID
         partner = request.env['res.partner'].browse(partner_id)
+
+        list_not_title = ['lang', 'company_type', 'email', 'website']
+
+        for key, value in update_vals.items():
+            if isinstance(value, str):
+                if key in list_not_title:
+                    pass
+                else:
+                    update_vals[key] = value.title()
 
         # Actualizar el contacto con los nuevos valores
         partner.write(update_vals)
@@ -60,9 +78,11 @@ class MainController(Controller):
         domain = ['|', ('email', '=', email), ('mobile', '=', phone)]
         existing_contact = request.env['res.partner'].search(domain, limit=1)
 
+        list_not_title = ['lang', 'company_type', 'email', 'website']
+
         for key, value in contact_data.items():
             if isinstance(value, str):
-                if key == 'lang' or key == 'company_type':
+                if key in list_not_title:
                     pass
                 else:
                     contact_data[key] = value.title()  # Convierte la primera letra de cada palabra a mayúscula
@@ -127,9 +147,11 @@ class MainController(Controller):
             ('type', '=', 'delivery')
         ], limit=1)
 
+        list_not_title = ['lang', 'company_type', 'email', 'website']
+
         for key, value in delivery_data.items():
             if isinstance(value, str):
-                if key == 'lang' or key == 'company_type':
+                if key in list_not_title:
                     pass
                 else:
                     delivery_data[key] = value.title() 
@@ -231,3 +253,15 @@ class MainController(Controller):
         logger.info("Mensaje publicado en la orden de venta con ID %s", sale_order_id)
 
         return {"message": f"Mensaje publicado exitosamente en la orden de venta con ID: {sale_order_id}."}
+    
+    @route('/get_states_mexico', methods=['POST'], type='json', auth='user')
+    def get_states_mexico(self):
+        env = request.env
+
+        mexico = env['res.country'].search([('code', '=', 'MX')], limit=1)
+
+        states = env['res.country.state'].search([('country_id', '=', mexico.id)])
+
+        list_states = [{"id": state.id, "name": state.name} for state in states]
+
+        return {"states": list_states}
