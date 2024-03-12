@@ -1,6 +1,7 @@
 
 from odoo.http import request, Response, Controller, route
 
+import json
 import logging
 logger = logging.getLogger(__name__)
 
@@ -262,6 +263,9 @@ class MainController(Controller):
 
         states = env['res.country.state'].search([('country_id', '=', mexico.id)])
 
-        list_states = [{"id": state.id, "name": state.name} for state in states]
+        states_list = [{"id": state.id, "name": state.name} for state in states]
 
-        return {"states": list_states}
+        # return {"states": list_states}
+    
+        response = json.dumps(states_list)
+        return request.make_response(response, headers=[('Content-Type', 'application/json')])
