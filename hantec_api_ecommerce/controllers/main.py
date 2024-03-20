@@ -209,9 +209,9 @@ class MainController(Controller):
         invoices = order.invoice_ids
         
         # Confirm invoice
-        # invoices.action_post()
+        invoices.action_post()
 
-        return {"list_invoices": invoices.read(["name", "date"])}
+        return {"message": "Factura creada","list_invoices": invoices.read(["name", "date"])}
 
         
     @route('/confirm_sale_order', methods=['POST'], type='json', auth='user')
