@@ -189,15 +189,36 @@ class MainController(Controller):
         # Crear la orden de venta
         sale_order = request.env['sale.order'].create(sale_order_vals)
 
-        logger.info("Orden de venta creada con ID %s y Team ID %s", sale_order.id, sale_order.team_id.id)
+        logger.info("Orden de venta creada con ID %s y Team ID %s", sale_order.id, sale_order.id)
 
-        return {"message": f"Orden de venta creada con ID: {sale_order.id}, Team ID: {sale_order.team_id.id}", "sale_order_id": sale_order.team_id.id}
+        return {"message": f"Orden de venta creada con ID: {sale_order.id}, Team ID: {sale_order.team_id.id}", "sale_order_id": sale_order.id}
+    
+    @route('/invoice_sale_order/<model("sale.order"):order>', methods=['POST'], type='json', auth='user')
+    def invoice_sale_order(self, order=False):
+        context = {
+            'active_model': 'sale.order',
+            'active_ids': [order.id],
+            'active_id': order.id,
+        }
+        # Let's do an invoice for a down payment of 50
+        invoice_wizard = self.env['sale.advance.payment.inv'].with_context(context).create({
+            'advance_payment_method': 'delivered'})
+        
+        invoice_wizard.create_invoices()
+
+        invoices = order.invoice_ids
+        
+        # Confirm invoice
+        # invoices.action_post()
+
+        return {"list_invoices": invoices.read(["name", "date"])}
+
         
     @route('/confirm_sale_order', methods=['POST'], type='json', auth='user')
-    def confirm_sale_order(self):
+    def confirm_sale_order(self, sale_order_id):
         
-        data = request.jsonrequest
-        sale_order_id = data.get('sale_order_id')
+        # data = request.jsonrequest
+        # sale_order_id = data.get('sale_order_id')
 
         # Encontrar la orden de venta por su ID
         sale_order = request.env['sale.order'].browse(sale_order_id)
@@ -259,13 +280,11 @@ class MainController(Controller):
     def get_states_mexico(self):
         env = request.env
 
-        mexico = env['res.country'].search([('code', '=', 'MX')], limit=1)
+        mexico = env.ref('base.mx')
 
-        states = env['res.country.state'].search([('country_id', '=', mexico.id)])
+        states = mexico.state_ids
 
-        states_list = [{"id": state.id, "name": state.name} for state in states]
+        states_list = states.read(['name'])
 
-        # return {"states": list_states}
-    
         response = json.dumps(states_list)
         return request.make_response(response, headers=[('Content-Type', 'application/json')])
