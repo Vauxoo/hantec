@@ -201,7 +201,7 @@ class MainController(Controller):
             'active_id': order.id,
         }
         # Let's do an invoice for a down payment of 50
-        invoice_wizard = self.env['sale.advance.payment.inv'].with_context(context).create({
+        invoice_wizard = request.env['sale.advance.payment.inv'].with_context(context).create({
             'advance_payment_method': 'delivered'})
         
         invoice_wizard.create_invoices()
