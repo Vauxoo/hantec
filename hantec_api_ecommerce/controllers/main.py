@@ -51,7 +51,7 @@ class MainController(Controller):
         # Encontrar el contacto por su ID
         partner = request.env['res.partner'].browse(partner_id)
 
-        list_not_title = ['lang', 'company_type', 'email', 'website']
+        list_not_title = ['lang', 'company_type', 'email', 'website', 'vat']
 
         for key, value in update_vals.items():
             if isinstance(value, str):
@@ -180,7 +180,7 @@ class MainController(Controller):
 
         sale_order_vals = {
             'partner_id': sale_order_data['partner_id'],
-            'order_line': [(0, 0, {'product_id': line['product_id'], 'product_uom_qty': line['product_qty']}) for line in sale_order_data['product_lines']]
+            'order_line': [(0, 0, {'product_id': line['product_id'], 'product_uom_qty': line['product_qty'], 'discount': line['discount'] or 0}) for line in sale_order_data['product_lines']]
         }
         
         if 'team_id' in sale_order_data:
