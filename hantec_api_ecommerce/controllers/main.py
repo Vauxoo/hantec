@@ -180,7 +180,7 @@ class MainController(Controller):
 
         sale_order_vals = {
             'partner_id': sale_order_data['partner_id'],
-            'order_line': [(0, 0, {'product_id': line['product_id'], 'product_uom_qty': line['product_qty'], 'discount': line['discount'] or 0}) for line in sale_order_data['product_lines']]
+            'order_line': [(0, 0, {'product_id': line['product_id'], 'product_uom_qty': line['product_qty'], 'discount': line['discount'] if line['discount'] else 0 }) for line in sale_order_data['product_lines']]
         }
         
         if 'team_id' in sale_order_data:
