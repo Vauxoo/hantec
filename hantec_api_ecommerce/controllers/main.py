@@ -175,7 +175,7 @@ class MainController(Controller):
 
         # id del cliente (partner_id) y lista de productos (product_lines)
         required_fields = ['partner_id', 'product_lines']  # product_lines es una lista de diccionarios con 'product_id' y 'product_qty'
-        optional_fields = ['team_id']
+        optional_fields = ['team_id', 'origin', 'campaign_id', 'medium_id']
         sale_order_data = {field: request.jsonrequest.get(field) for field in required_fields + optional_fields if request.jsonrequest.get(field)}
 
         sale_order_vals = {
@@ -185,6 +185,15 @@ class MainController(Controller):
         
         if 'team_id' in sale_order_data:
             sale_order_vals['team_id'] = sale_order_data['team_id']
+
+        if 'origin' in sale_order_data:
+            sale_order_vals['origin'] = sale_order_data['origin']
+
+        if 'campaign_id' in sale_order_data:
+            sale_order_vals['campaign_id'] = sale_order_data['campaign_id']
+
+        if 'medium_id' in sale_order_data:
+            sale_order_vals['medium_id'] = sale_order_data['medium_id']
 
         # Crear la orden de venta
         sale_order = request.env['sale.order'].create(sale_order_vals)
