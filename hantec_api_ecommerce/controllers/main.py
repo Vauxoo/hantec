@@ -1,5 +1,5 @@
 
-from odoo.http import request, Response, Controller, route, content_disposition
+from odoo.http import request, Response, Controller, route
 
 import json
 import logging
@@ -180,7 +180,7 @@ class MainController(Controller):
 
         sale_order_vals = {
             'partner_id': sale_order_data['partner_id'],
-            'order_line': [(0, 0, {'product_id': line['product_id'], 'product_uom_qty': line['product_qty'], 'discount': line.get('discount', 0)}) for line in sale_order_data['product_lines']]
+            'order_line': [(0, 0, {'product_id': line['product_id'], 'product_uom_qty': line['product_qty'], 'price_unit': line.get('price_unit', 0), 'discount': line.get('discount', 0)}) for line in sale_order_data['product_lines']]
         }
         
         if 'team_id' in sale_order_data:
@@ -204,45 +204,27 @@ class MainController(Controller):
     
     @route('/invoice_sale_order/<model("sale.order"):order>', methods=['POST'], type='json', auth='user')
     def invoice_sale_order(self, order=False):
+        data = request.jsonrequest
         context = {
             'active_model': 'sale.order',
             'active_ids': [order.id],
             'active_id': order.id,
         }
-        # Let's do an invoice for a down payment of 50
+        
         invoice_wizard = request.env['sale.advance.payment.inv'].with_context(context).create({
             'advance_payment_method': 'delivered'})
         
         invoice_wizard.create_invoices()
 
         invoices = order.invoice_ids
+
+        for invoice in invoices:
+            invoice.write({'l10n_mx_edi_usage': data.get('code_usage', 'G01')})
         
         # Confirm invoice
         invoices.action_post()
 
         return {"message": "Factura creada","list_invoices": invoices.read(["name", "date"])}
-    
-    @route('/download_invoice', methods=['POST'], type='json', auth='user')
-    def download_invoice(self):
-        data = request.jsonrequest
-        invoice_id = data.get('invoice_id')
-
-        # Encontrar la factura por su ID
-        invoice = request.env['account.move'].browse(invoice_id)
-
-        if not invoice.exists():
-            return {"error": "La factura no existe o ha sido eliminada."}
-
-        # Generar factura
-        pdf = request.env.ref('account.account_invoices')._render_qweb_pdf([invoice_id])[0]
-
-        # Crear la respuesta para enviar el archivo PDF
-        pdf_http_headers = [
-            ('Content-Type', 'application/pdf'),
-            ('Content-Length', len(pdf)),
-            ('Content-Disposition', content_disposition('invoice_%s.pdf' % invoice.name))
-        ]
-        return request.make_response(pdf, headers=pdf_http_headers)
         
     @route('/confirm_sale_order', methods=['POST'], type='json', auth='user')
     def confirm_sale_order(self):
