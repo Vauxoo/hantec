@@ -233,10 +233,6 @@ class MainController(Controller):
         if not invoice.exists():
             return {"error": "La factura no existe o ha sido eliminada."}
 
-        # Asegurarse de que la factura es del tipo 'out_invoice' para facturas de cliente
-        if invoice.type != 'out_invoice':
-            return {"error": "El ID proporcionado no corresponde a una factura de cliente."}
-
         # Generar factura
         pdf = request.env.ref('account.account_invoices')._render_qweb_pdf([invoice_id])[0]
 
