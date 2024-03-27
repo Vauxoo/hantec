@@ -228,27 +228,29 @@ class MainController(Controller):
     
     @route('/download_invoice', methods=['POST'], type='json', auth='user')
     def download_invoice(self):
+        
         data = request.jsonrequest
         invoice_id = data.get('invoice_id')
 
         # Encontrar la factura por su ID
         invoice = request.env['account.move'].browse(invoice_id)
 
-        # Asegurarse de que la factura existe
         if not invoice.exists():
             return {"error": "La factura no existe."}
 
-        # Generar el PDF de la factura
-        pdf_content, content_type = request.env.ref('account.account_invoices')._render_qweb_pdf([invoice_id])
-
+        pdf_content = request.env.ref('account.account_invoices')._get_report_base_filename(invoice_id)
+        
         if not pdf_content:
-            return {"error": "No se pudo generar el PDF de la factura."}
+            return {"error": "Error al generar el PDF de la factura."}
 
-        http_response = request.make_response(pdf_content,
-                                              headers=[('Content-Type', 'application/pdf'),
-                                                       ('Content-Length', len(pdf_content)),
-                                                       ('Content-Disposition', content_disposition('Factura_%s.pdf' % invoice.name))])
-        return http_response
+        headers = [
+            ('Content-Type', 'application/pdf'),
+            ('Content-Disposition', content_disposition(f"Factura_{invoice_id}.pdf"))
+        ]
+
+        logger.info("Factura con ID %s descargada exitosamente.", invoice_id)
+
+        return request.make_response(pdf_content, headers=headers)
         
     @route('/confirm_sale_order', methods=['POST'], type='json', auth='user')
     def confirm_sale_order(self):
