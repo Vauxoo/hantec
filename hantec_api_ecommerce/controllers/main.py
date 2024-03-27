@@ -1,5 +1,5 @@
 
-from odoo.http import request, Response, Controller, route, content_disposition
+from odoo.http import request, Response, Controller, route
 
 import json
 import logging
@@ -226,32 +226,20 @@ class MainController(Controller):
 
         return {"message": "Factura creada","list_invoices": invoices.read(["name", "date"])}
     
-    @route('/download_invoice', methods=['POST'], type='json', auth='user')
-    def download_invoice(self):
-        
-        data = request.jsonrequest
-        invoice_id = data.get('invoice_id')
-
-        # Encontrar la factura por su ID
+    @route('/download_invoice/<int:invoice_id>', methods=['GET'], type='http', auth="user")
+    def download_invoice(self, invoice_id):
+        # Asegurarse de que el usuario tiene permisos para ver esta factura
         invoice = request.env['account.move'].browse(invoice_id)
 
-        if not invoice:
-            return {"error": "Factura no encontrada"}
+        # Generar el PDF
+        pdf_content, _ = request.env.ref('account.account_invoices')._render_qweb_pdf([invoice_id])
 
-        # Generar el PDF de la factura
-        # Asegúrate de que el nombre del reporte ('account.report_invoice') sea correcto
-        # para tu versión y configuración de Odoo
-        pdf_content, content_type = request.env.ref('account.account_invoices')._render_qweb_pdf([invoice.id])
-
-        if not pdf_content:
-            return {"error": "No se pudo generar el PDF de la factura"}
-
-        pdf_http_headers = [
+        # Preparar la respuesta HTTP con el PDF
+        http_headers = [
             ('Content-Type', 'application/pdf'),
             ('Content-Length', len(pdf_content)),
-            ('Content-Disposition', content_disposition('Factura-%s.pdf' % invoice.name))
         ]
-        return request.make_response(pdf_content, headers=pdf_http_headers)
+        return request.make_response(pdf_content, headers=http_headers)
         
     @route('/confirm_sale_order', methods=['POST'], type='json', auth='user')
     def confirm_sale_order(self):
