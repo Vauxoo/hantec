@@ -226,9 +226,9 @@ class MainController(Controller):
 
         return {"message": "Factura creada","list_invoices": invoices.read(["name", "date"])}
     
-    @route('/download_invoice/<int:invoice_id>', methods=['GET'], type='http', auth="user")
+    @route('/download_invoice/<int:invoice_id>', methods=['GET'], type='http', auth="public")
     def download_invoice(self, invoice_id):
-        # Asegurarse de que el usuario tiene permisos para ver esta factura
+        # Buscar factura
         invoice = request.env['account.move'].browse(invoice_id)
 
         # Generar el PDF
@@ -240,6 +240,28 @@ class MainController(Controller):
             ('Content-Length', len(pdf_content)),
         ]
         return request.make_response(pdf_content, headers=http_headers)
+    
+    @route('/send_invoice_email', type='json', auth='user', methods=['POST'])
+    def send_invoice_email(self, **kwargs):
+        invoice_id = kwargs.get('invoice_id')
+        email_template_id = kwargs.get('email_template_id')
+
+        # Verificar que el ID de la factura y la plantilla han sido proporcionados
+        if not invoice_id or not email_template_id:
+            return {"error": "Faltan datos requeridos para enviar el correo electrónico."}
+
+        invoice = request.env['account.move'].browse(int(invoice_id))
+        email_template = request.env['mail.template'].browse(int(email_template_id))
+
+        if not invoice.exists():
+            return {"error": "La factura especificada no existe."}
+        if not email_template.exists():
+            return {"error": "La plantilla de correo electrónico especificada no existe."}
+
+        # Enviar la factura por correo electrónico
+        email_template.send_mail(invoice.id, force_send=True)
+
+        return {"message": "Correo electrónico enviado exitosamente."}
         
     @route('/confirm_sale_order', methods=['POST'], type='json', auth='user')
     def confirm_sale_order(self):
