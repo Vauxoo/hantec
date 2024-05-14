@@ -892,7 +892,7 @@ class MainController(Controller):
             "inventory_data": data_product,
         }
 
-    @route("/get_states_mexico", methods=["GET"], type="http", auth="user")
+    @route("/get_states_mexico", methods=["GET"], type="json", auth="user")
     def get_states_mexico(self):
         """
         Retrieves the list of states in Mexico.
