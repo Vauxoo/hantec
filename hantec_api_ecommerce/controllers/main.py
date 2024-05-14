@@ -40,7 +40,7 @@ class MainController(Controller):
         if email or phone:
             email_pattern = r"^([a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*)"  # Email pattern to get the value before @
             email_prefix = re.match(email_pattern, email).group() if email else None
-            phone_suffix = phone[len(phone) - 5 :] if phone else None
+            phone_suffix = phone[len(phone) - 4 :] if phone else None
 
             domain = []
             if email_prefix:
