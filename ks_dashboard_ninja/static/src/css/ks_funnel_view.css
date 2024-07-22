@@ -1,0 +1,22 @@
+#chart3 {
+    width: 100%;
+    height: 400px;
+ }
+
+#chart4 {
+    width: 100%;
+    height: 400px;
+ }
+
+.ks_funnel_item_container{
+    margin-right:25px;
+}
+
+.funnel_text{
+    font:3rem Lucida Grande;
+    align-items:center;
+    display:flex;
+    justify-content:center;
+    width:100%;
+    height:100%;
+ }
