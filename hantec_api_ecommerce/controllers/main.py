@@ -720,3 +720,27 @@ class MainController(Controller):
             "message": f"List states from {country.name}",
             "states_list": states_list,
         }
+
+    @route("/get_product_id", methods=["POST"], type="json", auth="user")
+    def get_product_id(self):
+        """Get Product ID by Internal Reference.
+
+        This endpoint receives an internal reference (default_code) and returns the corresponding product ID if it exists.
+
+        JSON request body:
+            - sku (str): The internal reference of the product (default_code).
+
+        JSON response:
+            - product_id (int): The ID of the product if found.
+            - message (str): A message indicating the result.
+        """
+        sku = request.jsonrequest.get("sku")
+
+        product = request.env["product.product"].search(
+            [("default_code", "=", sku)], limit=1
+        )
+
+        return {
+            "message": f"Product found with ID: {product.id}",
+            "product_id": product.id,
+        }
