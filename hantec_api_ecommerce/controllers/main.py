@@ -17,6 +17,8 @@ class MainController(Controller):
             - email (str, optional): The email of the contact.
             - phone (str, optional): The phone number of the contact.
             - store_name (str, optional): The store name associated with the contact.
+            - name (str, optional): The name of the contact.
+            - marketplace (bool, optional): Value to validate if it is required create different contact
             - partner_id (int, optional): The parent ID for the contact.
             - contact_data (dict, optional): Additional contact data.
 
@@ -35,6 +37,24 @@ class MainController(Controller):
         store_name = data.get("store_name")
         partner_id = data.get("partner_id")
         contact_data = data.get("contact_data", {})
+
+        if data.get("marketplace"):
+            name = data.get("name")
+            domain = [("name", "=", name)]
+            existing_contact = env["res.partner"].search(domain, limit=1)
+
+            if existing_contact:
+                return {
+                    "message": f"Contact found with ID: {existing_contact.id}",
+                    "contact_id": existing_contact.id,
+                }
+            contact_data["name"] = name
+            new_contact = env["res.partner"].create(contact_data)
+
+            return {
+                "message": f"New contact created with ID {new_contact.id}",
+                "contact_id": new_contact.id,
+            }
 
         if email or phone:
             phone_suffix = phone[len(phone) - 4 :] if phone else None
