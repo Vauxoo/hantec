@@ -8,7 +8,7 @@
                 <h1>
                     <field name="product_id" readonly="1"/>
                 </h1>
-                <group string="Stock Informations">
+                <group string="Información sobre Stock">
                    <field name="stock_line" nolabel="1" readonly="1">
                         <tree editable="bottom">
                             <field name="warehouse_id"/>
@@ -26,7 +26,7 @@
     </record>
 
     <record id="action_view_add_sale_stock_warehouser" model="ir.actions.act_window">
-        <field name="name">Product's Stock Details</field>
+        <field name="name">Detalles de Stock del Producto</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">sale.warehouse</field>
         <field name="view_mode">form</field>
