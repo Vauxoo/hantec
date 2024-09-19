@@ -236,6 +236,7 @@ class MainController(Controller):
             "warehouse_id",
             "fulfillment",
             "yuju_shop_id",
+            "require_signature",
             "require_payment",
             "note",
         ]
