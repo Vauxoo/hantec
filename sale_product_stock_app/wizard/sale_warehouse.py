@@ -187,8 +187,8 @@ class SaleWarehouseLine(models.TransientModel):
 	_description = "Sale Warehouse"
 
 
-	warehouse_id = fields.Many2one('stock.warehouse',string="Warehouse")
-	location_id = fields.Many2one('stock.location',string="Location")
-	on_hand = fields.Float('On Hand Qty')
-	available_qty = fields.Float('Available Qty')
+	warehouse_id = fields.Many2one('stock.warehouse',string="Almacen")
+	location_id = fields.Many2one('stock.location',string="Ubicación")
+	available_qty = fields.Float('Cantidad Disponible')
+	on_hand = fields.Float('A la mano')
 	sale_stock_id = fields.Many2one('sale.warehouse',string="Sale Stock")
