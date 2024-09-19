@@ -229,9 +229,15 @@ class MainController(Controller):
             "origin",
             "campaign_id",
             "medium_id",
+            "channel",
             "channel_order_reference",
             "yuju_carrier_tracking_ref",
             "partner_shipping_id",
+            "warehouse_id",
+            "fulfillment",
+            "yuju_shop_id",
+            "require_payment",
+            "note",
         ]
         sale_order_data = {
             field: request.jsonrequest.get(field)
