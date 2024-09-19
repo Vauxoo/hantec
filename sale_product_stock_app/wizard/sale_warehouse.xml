@@ -13,8 +13,8 @@
                         <tree editable="bottom">
                             <field name="warehouse_id"/>
                             <field name="location_id"/>
-                            <field name="on_hand"/>
                             <field name="available_qty"/>
+                            <field name="on_hand"/>
                         </tree>
                    </field>
                </group>
