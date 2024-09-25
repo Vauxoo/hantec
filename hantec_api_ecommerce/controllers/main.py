@@ -201,52 +201,24 @@ class MainController(Controller):
                 - price_shipping (float): The shipping price.
 
             Optional fields:
-                - team_id (int): The ID of the sales team.
-                - origin (str): The origin of the order.
-                - campaign_id (int): The ID of the marketing campaign.
-                - medium_id (int): The ID of the marketing medium.
-                - channel_order_reference (str): The reference for the channel order.
-                - yuju_carrier_tracking_ref (str): The tracking reference for the carrier.
-                - partner_shipping_id (int): The ID of the shipping partner.
-
-        JSON response:
-            - message (str): A message indicating that the sale order has been successfully created.
-            - sale_order_id (int): The ID of the created sale order.
-            - sale_order_name (str): The name of the created sale order.
+                Any additional fields provided in the request will be considered optional
+                and will be added to the sale order if they exist in the sale.order model.
 
         Returns:
             dict: A dictionary with a success message, the sale order ID, and the sale order name.
-
         """
-        # ID of client (partner_id) y list of products (product_lines)
-        required_fields = [
-            "partner_id",
-            "product_lines",
-            "price_shipping",
-        ]  # product_lines is a dictionary list with 'product_id' and 'product_qty'
-        optional_fields = [
-            "team_id",
-            "origin",
-            "campaign_id",
-            "medium_id",
-            "channel",
-            "channel_order_reference",
-            "yuju_carrier_tracking_ref",
-            "partner_shipping_id",
-            "warehouse_id",
-            "fulfillment",
-            "yuju_shop_id",
-            "require_signature",
-            "require_payment",
-            "note",
-        ]
-        sale_order_data = {
-            field: request.jsonrequest.get(field)
-            for field in required_fields + optional_fields
-            if request.jsonrequest.get(field)
-        }
+        required_fields = ["partner_id", "product_lines", "price_shipping"]
+        data = request.jsonrequest
 
-        order_line = [
+        sale_order_data = {field: data[field] for field in required_fields}
+
+        # Add optional fields
+        for field, value in data.items():
+            if field not in required_fields:
+                sale_order_data[field] = value
+
+        # Prepare order lines
+        order_lines = [
             (
                 0,
                 0,
@@ -263,13 +235,13 @@ class MainController(Controller):
 
         sale_order_vals = {
             "partner_id": sale_order_data["partner_id"],
-            "order_line": order_line,
+            "order_line": order_lines,
         }
 
-        # Add optional values
-        for field in optional_fields:
-            if field in sale_order_data:
-                sale_order_vals[field] = sale_order_data[field]
+        # Add all other valid fields
+        for field, value in sale_order_data.items():
+            if field not in ["partner_id", "product_lines"]:
+                sale_order_vals[field] = value
 
         # Create sale order
         sale_order = request.env["sale.order"].create(sale_order_vals)
@@ -406,7 +378,7 @@ class MainController(Controller):
                 "amount": amount,
                 "journal_id": journal_id,
                 "l10n_mx_edi_payment_method_id": payment_method_id,
-                "communication": "Payment for invoice %s" % invoice.name,
+                "communication": invoice.name,
             }
         )
 
