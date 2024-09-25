@@ -197,8 +197,7 @@ class MainController(Controller):
                     - product_qty (float): The quantity of the product.
                     - price_unit (float, optional): The unit price of the product (default is 0).
                     - discount (float, optional): The discount on the product (default is 0).
-                    - tax_id (int, optional): The tax ID for the product (default is 2).
-                - price_shipping (float): The shipping price.
+                    - tax_id (int, optional): The tax ID for the product (default is 2).                
 
             Optional fields:
                 Any additional fields provided in the request will be considered optional
@@ -207,7 +206,7 @@ class MainController(Controller):
         Returns:
             dict: A dictionary with a success message, the sale order ID, and the sale order name.
         """
-        required_fields = ["partner_id", "product_lines", "price_shipping"]
+        required_fields = ["partner_id", "product_lines"]
         data = request.jsonrequest
 
         sale_order_data = {field: data[field] for field in required_fields}
