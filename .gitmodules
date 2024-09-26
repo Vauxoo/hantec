@@ -36,3 +36,7 @@
 	path = l10n-mx-edi-uuid
 	url = git@git.vauxoo.com:mexico/l10n-mx-edi-uuid.git
 	branch = 15.0
+[submodule "server-backend"]
+	path = server-backend
+	url = git@github.com:OCA/server-backend.git
+	branch = 15.0
