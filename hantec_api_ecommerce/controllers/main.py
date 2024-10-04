@@ -299,7 +299,8 @@ class MainController(Controller):
             - order (sale.order): The sale order model instance.
 
         JSON request body:
-            - Any additional fields provided in the request will be added to the invoice sale order if they exist in the model.
+            - code_usage (str): The code usage for the invoice (optional, default is "G01").
+            - journal_id (str): The ID for the journey (optional).
 
         JSON response:
             - message (str): A message indicating that the invoice has been successfully created.
@@ -309,6 +310,7 @@ class MainController(Controller):
             dict: A dictionary with a success message and a list of created invoices.
 
         """
+        data = request.jsonrequest
         context = {
             "active_model": "sale.order",
             "active_ids": [order.id],
@@ -325,7 +327,12 @@ class MainController(Controller):
         invoices = order.invoice_ids
 
         for invoice in invoices:
-            invoice.write(request.jsonrequest)
+            invoice.write(
+                {
+                    "l10n_mx_edi_usage": data.get("code_usage", "G01"),
+                    "journal_id": data.get("journal_id"),
+                }
+            )
 
         # Confirm invoice
         invoices.action_post()
