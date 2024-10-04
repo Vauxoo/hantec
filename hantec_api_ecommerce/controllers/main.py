@@ -197,7 +197,7 @@ class MainController(Controller):
                     - product_qty (float): The quantity of the product.
                     - price_unit (float, optional): The unit price of the product (default is 0).
                     - discount (float, optional): The discount on the product (default is 0).
-                    - tax_id (int, optional): The tax ID for the product (default is 2).                
+                    - tax_id (int, optional): The tax ID for the product (default is 2).
 
             Optional fields:
                 Any additional fields provided in the request will be considered optional
@@ -299,7 +299,7 @@ class MainController(Controller):
             - order (sale.order): The sale order model instance.
 
         JSON request body:
-            - code_usage (str): The code usage for the invoice (optional, default is "G01").
+            - Any additional fields provided in the request will be added to the invoice sale order if they exist in the model.
 
         JSON response:
             - message (str): A message indicating that the invoice has been successfully created.
@@ -309,7 +309,6 @@ class MainController(Controller):
             dict: A dictionary with a success message and a list of created invoices.
 
         """
-        data = request.jsonrequest
         context = {
             "active_model": "sale.order",
             "active_ids": [order.id],
@@ -326,7 +325,7 @@ class MainController(Controller):
         invoices = order.invoice_ids
 
         for invoice in invoices:
-            invoice.write({"l10n_mx_edi_usage": data.get("code_usage", "G01")})
+            invoice.write(request.jsonrequest)
 
         # Confirm invoice
         invoices.action_post()
