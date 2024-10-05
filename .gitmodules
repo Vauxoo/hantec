@@ -36,3 +36,8 @@
 	path = l10n-mx-edi-uuid
 	url = git@git.vauxoo.com:mexico/l10n-mx-edi-uuid.git
 	branch = 15.0
+
+[submodule "OCA/margin-analysis"]
+	path = OCA/margin-analysis
+	url = git@github.com:OCA/margin-analysis.git
+	branch = 15.0
