@@ -330,9 +330,11 @@ class MainController(Controller):
             invoice.write(
                 {
                     "l10n_mx_edi_usage": data.get("code_usage", "G01"),
-                    "journal_id": data.get("journal_id"),
                 }
             )
+            if data.get("journal_id"):
+                journal_id = data["journal_id"]
+                invoice.write({"journal_id": journal_id})
 
         # Confirm invoice
         invoices.action_post()
