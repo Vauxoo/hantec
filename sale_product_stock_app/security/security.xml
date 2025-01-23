@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<odoo>
-	<data>
-		<record id="group_show_sale_order_prodcut_stock_warehouse" model="res.groups" >
-        	<field name="name">Show Stock Info In Sale Order</field>
-    	</record>
-    </data>
-</odoo>
