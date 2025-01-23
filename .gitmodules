@@ -4,39 +4,39 @@
 [submodule "connector"]
 	path = connector
 	url = git@github.com:OCA/connector.git
-	branch = 18.0
+	branch = 15.0
 [submodule "l10n-mx-payroll"]
 	path = l10n-mx-payroll
 	url = git@git.vauxoo.com:vauxoo/l10n-mx-payroll.git
 [submodule "hr-advanced"]
 	path = hr-advanced
 	url = git@git.vauxoo.com:vauxoo/hr-advanced.git
-	branch = 18.0
+	branch = 15.0
 [submodule "hr"]
 	path = hr
 	url = git@github.com:Vauxoo/hr.git
-	branch = 18.0
+	branch = 15.0
 [submodule "stock-psycho-account"]
 	path = stock-psycho-account
 	url = git@git.vauxoo.com:vauxoo/stock-psycho-account.git
-	branch = 18.0
+	branch = 15.0
 [submodule "stock-logistics-workflow"]
 	path = stock-logistics-workflow
 	url = git@github.com:OCA/stock-logistics-workflow.git
-	branch = 18.0
+	branch = 15.0
 [submodule "mexico-document"]
 	path = mexico-document
 	url = git@git.vauxoo.com:vauxoo/mexico-document.git
-	branch = 18.0
+	branch = 15.0
 [submodule "edi-document"]
 	path = edi-document
 	url = git@git.vauxoo.com:vauxoo/edi-document.git
-	branch = 18.0
+	branch = 15.0
 [submodule "l10n-mx-edi-uuid"]
 	path = l10n-mx-edi-uuid
 	url = git@git.vauxoo.com:mexico/l10n-mx-edi-uuid.git
-	branch = 18.0
+	branch = 15.0
 [submodule "margin-analysis"]
 	path = margin-analysis
 	url = git@github.com:Vauxoo/margin-analysis.git
-	branch = 18.0
+	branch = 15.0
