@@ -43,3 +43,4 @@
 [submodule "server-backend"]
 	path = server-backend
 	url = git@github.com:OCA/server-backend.git
+	branch = 18.0
