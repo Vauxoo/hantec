@@ -1,7 +1,7 @@
 {
     "name": "Hantec API Ecommerce",
     "summary": "Hantece API Ecommerce",
-    "version": "15.0.0",
+    "version": "18.0.0",
     "author": "C&O PROJECTS AND SOLUTIONS",
     "license": "OEEL-1",
     "category": "Sales Managment",
