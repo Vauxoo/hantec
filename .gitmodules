@@ -40,7 +40,3 @@
 	path = margin-analysis
 	url = git@github.com:Vauxoo/margin-analysis.git
 	branch = 18.0
-[submodule "server-backend"]
-	path = server-backend
-	url = git@github.com:OCA/server-backend.git
-	branch = 18.0
