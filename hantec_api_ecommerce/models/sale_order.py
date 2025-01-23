@@ -1,8 +1,13 @@
-from odoo import models
+from odoo import fields, models
 
 
 class SaleOrder(models.Model):
     _inherit = "sale.order"
+
+    allowed_pricelist_ids = fields.Many2many(
+        'product.pricelist',
+        string="Allowed Pricelists"
+    )
 
     def get_shipping_info(self):
         """Retrieve shipping information for the sale order instance.
