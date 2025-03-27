@@ -1,0 +1,4 @@
+# Required by hr_employer_registration
+odoo_upgrade @ git+https://github.com/odoo/upgrade-util@master
+# Required by the "component" Odoo module
+cachetools
