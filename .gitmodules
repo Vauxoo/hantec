@@ -38,3 +38,8 @@
 	path = margin-analysis
 	url = git@github.com:Vauxoo/margin-analysis.git
 	branch = 18.0
+
+[submodule "JAntonioSalas/hantec-api-ecommerce"]
+	path = JAntonioSalas/hantec-api-ecommerce
+	url = git@github.com:JAntonioSalas/hantec-api-ecommerce.git
+	branch = main
