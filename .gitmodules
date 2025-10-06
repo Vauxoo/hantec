@@ -1,7 +1,7 @@
 [submodule "hantec"]
 	path = hantec
 	url = git@git.vauxoo.com:vauxoo/hantec.git
-	branch = 18.0
+	branch = 18.0-madkting-updates-isaako34
 [submodule "connector"]
 	path = connector
 	url = git@github.com:OCA/connector.git
