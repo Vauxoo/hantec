@@ -40,6 +40,6 @@
 	branch = 18.0
 
 [submodule "JAntonioSalas/hantec-api-ecommerce"]
-	path = JAntonioSalas/hantec-api-ecommerce
+	path = hantec-api-ecommerce
 	url = git@github.com:JAntonioSalas/hantec-api-ecommerce.git
 	branch = main
