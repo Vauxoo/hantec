@@ -42,8 +42,3 @@
 	path = hantec-api-ecommerce
 	url = git@github.com:JAntonioSalas/hantec-api-ecommerce.git
 	branch = main
-
-[submodule "hantec-api-ecommerce"]
-	path = hantec-api-ecommerce
-	url = git@github.com:JAntonioSalas/hantec-api-ecommerce.git
-	branch = main
