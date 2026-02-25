@@ -38,7 +38,3 @@
 	path = margin-analysis
 	url = git@github.com:Vauxoo/margin-analysis.git
 	branch = 18.0
-[submodule "hantec-core-api"]
-	path = hantec-core-api
-	url = git@github.com:JAntonioSalas/hantec-core-api.git
-	branch = main
